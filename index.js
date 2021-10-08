@@ -1,7 +1,8 @@
 const puppeteer = require('puppeteer');
+const fs = require('fs');
 
 (async () => {
-  const browser = await puppeteer.launch({headless: false});
+  const browser = await puppeteer.launch();
   const page = await browser.newPage();
   await page.goto('https://www.correios.com.br/');
 
@@ -17,7 +18,10 @@ const puppeteer = require('puppeteer');
     return imgList
   })
 
-  await page.screenshot({ path: 'example.png' });
+  fs.writeFile('correios.json', JSON.stringify(imgList, null, 2), err => {
+    if(err) throw new Error('Something went worng');
+    console.log('Success!')
+  })
 
-  // await browser.close();
+  await browser.close();
 })();
